@@ -2,6 +2,9 @@ import { Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Pizza } from './models/pizza';
 import { PizzaDetail } from './components/pizza-detail/pizza-detail';
+import { Counter } from './components/counter/counter';
+import { User } from './models/user';
+import { Author } from './components/author/author';
 
 const PIZZAS: Pizza[] = [
   { id: '1', name: 'Reine', price: 12, image: '/assets/pizzas/reine.jpg' },
@@ -15,7 +18,7 @@ const PIZZAS: Pizza[] = [
 // class Box {} // Typage + instanciation possible
 
 @Component({
-  imports: [FormsModule, PizzaDetail],
+  imports: [FormsModule, PizzaDetail, Counter, Author],
   selector: 'app-root',
   template: `
     <div class="mx-auto max-w-xl p-6">
@@ -58,6 +61,12 @@ const PIZZAS: Pizza[] = [
           <li>Aucune pizza</li>
         }
       </ul>
+
+      <app-counter />
+      <app-counter [value]="5" />
+      <app-counter [value]="15" />
+
+      <app-author [author]="user()" />
     </div>
   `,
 })
@@ -65,6 +74,13 @@ export class App {
   title = signal('Pizza Party');
   selectedPizza = signal<Pizza | undefined>(undefined);
   pizzas = signal<Pizza[]>(PIZZAS);
+
+  user = signal<User>({
+    name: 'Mota',
+    firstName: 'Matthieu',
+    birthDate: '1991-11-18',
+    avatarUrl: 'https://i.pravatar.cc/150?img=63',
+  });
 
   count = computed(() => {
     return this.title().length + Math.random();
