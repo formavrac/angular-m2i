@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Pizza } from './models/pizza';
+import { PizzaDetail } from './components/pizza-detail/pizza-detail';
 
 const PIZZAS: Pizza[] = [
   { id: '1', name: 'Reine', price: 12, image: '/assets/pizzas/reine.jpg' },
@@ -12,38 +14,22 @@ const PIZZAS: Pizza[] = [
 // interface Pizza {} // Typage + implémentation possible
 // class Box {} // Typage + instanciation possible
 
-interface Pizza {
-  id: string;
-  name: string;
-  price: number;
-  image?: string;
-}
-
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule, PizzaDetail],
   selector: 'app-root',
   template: `
     <div class="mx-auto max-w-xl p-6">
       <h1 class="mb-4 text-3xl font-bold">{{ title() }}</h1>
-      <h2 class="text-xl font-semibold text-orange-600">{{ pizza().name }}</h2>
-      <div>
-        <span class="font-medium">id :</span>
-        {{ pizza().id }}
-      </div>
-      <div>
-        <span class="font-medium">nom :</span>
-        {{ pizza().name }}
-      </div>
-      <div>
-        <span class="font-medium">prix :</span>
-        {{ pizza().price }} €
-      </div>
-      <img class="my-4 rounded-lg" [src]="pizza().image" [alt]="pizza().name" />
-      <input type="text" class="border" [(ngModel)]="pizza().name" />
-      <input type="text" class="border"
-        [value]="pizza().name"
-        (input)="pizza.set({ ...pizza(), name: $event.target.value })"
-      />
+      @if (selectedPizza(); as pizza) {
+        <app-pizza-detail [pizza]="pizza" />
+        <input type="text" class="border" [(ngModel)]="pizza.name" />
+        <input type="text" class="border"
+          [value]="pizza.name"
+          (input)="selectedPizza.set({ ...pizza, name: $event.target.value })"
+        />
+      } @else {
+        <p class="mt-6 text-gray-500">Cliquez sur une pizza pour voir le détail.</p>
+      }
 
       <input type="text" class="border" [(ngModel)]="title" />
       <button (click)="changePrice()">
@@ -51,10 +37,20 @@ interface Pizza {
       </button>
       <h2 class="mb-2 text-xl font-semibold">Les pizzas ({{ count() }})</h2>
       <ul class="grid grid-cols-2 gap-4">
-        @for (pizza of cheapPizzas(); track pizza.id) {
-          <li class="rounded-lg border p-2">
+        @for (pizza of pizzas(); track pizza.id) {
+          @let priceWithTax = (pizza.price * 1.2).toFixed(2);
+          <li
+            class="cursor-pointer rounded-lg border p-2 hover:bg-orange-50"
+            [class.bg-orange-100]="pizza.id === selectedPizza()?.id"
+            [class]="{
+              'text-orange-800': pizza.price > 12,
+              'text-green-800': pizza.price <= 12,
+            }"
+            (click)="onSelect(pizza)"
+          >
             <span>{{ pizza.id }} : {{ pizza.name }}</span>
             <span>prix : {{ pizza.price }} €</span>
+            <span>prix TTC : {{ priceWithTax }} €</span>
             <img class="rounded" [src]="pizza.image" [alt]="pizza.name" />
             {{ $index + 1 }} / {{ $count }}
           </li>
@@ -67,7 +63,7 @@ interface Pizza {
 })
 export class App {
   title = signal('Pizza Party');
-  pizza = signal<Pizza>({ id: '1', name: 'Reine', price: 12, image: '/assets/pizzas/reine.jpg' });
+  selectedPizza = signal<Pizza | undefined>(undefined);
   pizzas = signal<Pizza[]>(PIZZAS);
 
   count = computed(() => {
@@ -81,5 +77,11 @@ export class App {
 
   changePrice() {
     this.pizzas.set(this.pizzas().map(pizza => ({ ...pizza, price: pizza.price - 1 })));
+  }
+
+  onSelect(pizza: Pizza) {
+    console.log(pizza);
+    this.selectedPizza.set(pizza); // On passe l'objet en référence
+    this.selectedPizza.set({ ...pizza }); // On passe une copie de l'objet
   }
 }
