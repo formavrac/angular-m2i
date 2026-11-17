@@ -1,4 +1,5 @@
-import { Component, input, model, output, ViewEncapsulation } from '@angular/core';
+import { Component, input, inject, model, output, ViewEncapsulation } from '@angular/core';
+import { PizzaService } from '../../services/pizza.service';
 import { Pizza } from '../../models/pizza';
 import { form, FormField } from '@angular/forms/signals';
 
@@ -33,8 +34,15 @@ import { form, FormField } from '@angular/forms/signals';
     </div>
   `,
   // templateUrl: './pizza-detail.html',
+  // providers: [PizzaService],
 })
 export class PizzaDetail {
+  pizzaService = inject(PizzaService)
+
+  constructor() {
+    console.log(this.pizzaService);
+  }
+
   readonly NO_INGREDIENT = 'Aucun';
   pizza = model.required<Pizza>();
   pizzaForm = form(this.pizza);

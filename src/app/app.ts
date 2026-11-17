@@ -1,17 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Pizza } from './models/pizza';
 import { PizzaDetail } from './components/pizza-detail/pizza-detail';
 import { Counter } from './components/counter/counter';
 import { User } from './models/user';
 import { Author } from './components/author/author';
-
-const PIZZAS: Pizza[] = [
-  { id: '1', name: 'Reine', price: 12, image: '/assets/pizzas/reine.jpg' },
-  { id: '2', name: '4 fromages', price: 13, image: '/assets/pizzas/4-fromages.jpg' },
-  { id: '3', name: 'Orientale', price: 11, image: '/assets/pizzas/orientale.jpg' },
-  { id: '4', name: 'Cannibale', price: 9, image: '/assets/pizzas/cannibale.jpg' },
-];
+import { PizzaService } from './services/pizza.service';
 
 // type Ingredient = {} // Juste typage...
 // interface Pizza {} // Typage + implémentation possible
@@ -52,8 +46,12 @@ const PIZZAS: Pizza[] = [
       </button>
 
       <h2 class="mb-2 text-xl font-semibold">Les pizzas ({{ count() }})</h2>
+      @if (pizzas.isLoading()) {
+        <p>Chargement des pizzas...</p>
+      }
+      <button (click)="pizzas.reload()">Reload</button>
       <ul class="grid grid-cols-2 gap-4">
-        @for (pizza of pizzas(); track pizza.id) {
+        @for (pizza of pizzas.value(); track pizza.id) {
           @let priceWithTax = (pizza.price * 1.2).toFixed(2);
           <li
             class="cursor-pointer rounded-lg border p-2 hover:bg-orange-50"
@@ -87,9 +85,18 @@ const PIZZAS: Pizza[] = [
   `,
 })
 export class App {
+  pizzaService = inject(PizzaService) // new PizzaService()
+
+  constructor() {
+    console.log(this.pizzaService);
+  }
+
   title = signal('Pizza Party');
   selectedPizza = signal<Pizza | undefined>(undefined);
-  pizzas = signal<Pizza[]>(PIZZAS);
+  pizzas = resource({
+    loader: () => this.pizzaService.getPizzas(),
+    defaultValue: [],
+  });
 
   user = signal<User>({
     name: 'Mota',
@@ -117,14 +124,14 @@ export class App {
   count = computed(() => {
     return this.title().length + Math.random();
   });
-  cheapPizzas = computed(() => this.pizzas().filter(pizza => pizza.price < 12));
+  cheapPizzas = computed(() => this.pizzas.value().filter(pizza => pizza.price < 12));
 
   pizzaCount() {
-    return this.pizzas().length + Math.random();
+    return this.pizzas.value().length + Math.random();
   }
 
   changePrice() {
-    this.pizzas.set(this.pizzas().map(pizza => ({ ...pizza, price: pizza.price - 1 })));
+    this.pizzas.set(this.pizzas.value().map(pizza => ({ ...pizza, price: pizza.price - 1 })));
   }
 
   onSelect(pizza: Pizza) {
