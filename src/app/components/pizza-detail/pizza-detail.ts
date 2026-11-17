@@ -17,6 +17,16 @@ import { form, FormField } from '@angular/forms/signals';
         <input class="rounded border px-2 py-1" [formField]="pizzaForm.name" />
       </label>
       <img class="my-4 rounded-lg" [src]="pizza().image" [alt]="pizza().name" />
+
+      <div>
+        @for (ingredient of ingredients; track ingredient) {
+          <label>
+            {{ ingredient }}
+            <input type="radio" name="ingredient" (change)="selectedIngredient.emit(ingredient === NO_INGREDIENT ? undefined : ingredient)" [checked]="ingredient === NO_INGREDIENT" />
+          </label>
+        }
+      </div>
+
       <button class="rounded bg-orange-600 px-4 py-2 text-white" (click)="order()">
         Commander
       </button>
@@ -25,9 +35,13 @@ import { form, FormField } from '@angular/forms/signals';
   // templateUrl: './pizza-detail.html',
 })
 export class PizzaDetail {
+  readonly NO_INGREDIENT = 'Aucun';
   pizza = model.required<Pizza>();
   pizzaForm = form(this.pizza);
   ordered = output<Pizza>();
+
+  ingredients = ['Tomates', 'Champignons', 'Olives', this.NO_INGREDIENT];
+  selectedIngredient = output<string | undefined>();
 
   order() {
     this.ordered.emit(this.pizza());

@@ -28,6 +28,7 @@ const PIZZAS: Pizza[] = [
           [pizza]="pizza"
           (pizzaChange)="onUpdate($event)"
           (ordered)="onOrder($event)"
+          (selectedIngredient)="onSelectIngredient($event)"
         />
         <input type="text" class="border" [(ngModel)]="pizza.name" />
         <input type="text" class="border"
@@ -49,6 +50,7 @@ const PIZZAS: Pizza[] = [
       <button (click)="changePrice()">
         Changer prix
       </button>
+
       <h2 class="mb-2 text-xl font-semibold">Les pizzas ({{ count() }})</h2>
       <ul class="grid grid-cols-2 gap-4">
         @for (pizza of pizzas(); track pizza.id) {
@@ -67,6 +69,9 @@ const PIZZAS: Pizza[] = [
             <span>prix TTC : {{ priceWithTax }} €</span>
             <img class="rounded" [src]="pizza.image" [alt]="pizza.name" />
             {{ $index + 1 }} / {{ $count }}
+            @if (selectedIngredient()) {
+              <span>Ingrédient sélectionné : {{ selectedIngredient() }}</span>
+            }
           </li>
         } @empty {
           <li>Aucune pizza</li>
@@ -94,9 +99,14 @@ export class App {
   });
 
   orders = signal<Pizza[]>([]);
+  selectedIngredient = signal<string | undefined>(undefined);
 
   onOrder(pizza: Pizza) {
     this.orders.update(orders => [...orders, pizza]);
+  }
+
+  onSelectIngredient(ingredient: string | undefined) {
+    this.selectedIngredient.set(ingredient);
   }
 
   onUpdate(pizza: Pizza) {
