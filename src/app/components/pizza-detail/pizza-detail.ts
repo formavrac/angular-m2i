@@ -2,6 +2,7 @@ import { Component, input, inject, model, output, ViewEncapsulation } from '@ang
 import { PizzaService } from '../../services/pizza.service';
 import { Pizza } from '../../models/pizza';
 import { form, FormField } from '@angular/forms/signals';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-pizza-detail',
@@ -38,6 +39,7 @@ import { form, FormField } from '@angular/forms/signals';
 })
 export class PizzaDetail {
   pizzaService = inject(PizzaService)
+  messageService = inject(MessageService)
 
   constructor() {
     console.log(this.pizzaService);
@@ -52,6 +54,11 @@ export class PizzaDetail {
   selectedIngredient = output<string | undefined>();
 
   order() {
+    this.messageService.add({
+      type: 'success',
+      content: `Pizza commandée : ${this.pizza().name}`
+    });
+
     this.ordered.emit(this.pizza());
   }
 }

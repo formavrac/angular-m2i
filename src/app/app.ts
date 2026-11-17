@@ -6,6 +6,7 @@ import { Counter } from './components/counter/counter';
 import { User } from './models/user';
 import { Author } from './components/author/author';
 import { PizzaService } from './services/pizza.service';
+import { MessageService } from './services/message.service';
 
 // type Ingredient = {} // Juste typage...
 // interface Pizza {} // Typage + implémentation possible
@@ -81,11 +82,32 @@ import { PizzaService } from './services/pizza.service';
       <app-counter [value]="15" />
 
       <app-author [author]="user()" />
+
+      <h2>Messages</h2>
+      <ul class="space-y-2">
+        @for (message of messageService.messages(); track $index) {
+          <li [class]="{
+              'bg-blue-100': message.type === 'info',
+              'bg-red-100': message.type === 'error',
+              'bg-green-100': message.type === 'success'
+            }"
+          >
+            {{ message.content }}
+            <button
+              (click)="messageService.delete($index)"
+              class="bg-red-500 text-white px-2 py-1 rounded-lg"
+            >Supprimer</button>
+          </li>
+        } @empty {
+          <li>Aucun message</li>
+        }
+      </ul>
     </div>
   `,
 })
 export class App {
   pizzaService = inject(PizzaService) // new PizzaService()
+  messageService = inject(MessageService)
 
   constructor() {
     console.log(this.pizzaService);
@@ -138,5 +160,10 @@ export class App {
     console.log(pizza);
     this.selectedPizza.set(pizza); // On passe l'objet en référence
     this.selectedPizza.set({ ...pizza }); // On passe une copie de l'objet
+
+    this.messageService.add({
+      type: 'info',
+      content: `Pizza sélectionnée : ${pizza.name}`
+    });
   }
 }
