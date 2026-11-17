@@ -14,7 +14,14 @@ export class PizzaService {
 
   getPizzas(): Promise<Pizza[]> {
     return new Promise(resolve => {
-      setTimeout(() => resolve(PIZZAS), 2000);
+      setTimeout(() => resolve(PIZZAS), 300);
     });
+  }
+
+  async searchPizzas(query: string): Promise<Pizza[]> {
+    const pizzas = await this.getPizzas();
+    console.log('CALL API');
+
+    return pizzas.filter(pizza => pizza.name.toLowerCase().includes(query.toLowerCase()));
   }
 }

@@ -1,4 +1,6 @@
 import { Component, input, inject, model, output, ViewEncapsulation } from '@angular/core';
+import { interval } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PizzaService } from '../../services/pizza.service';
 import { Pizza } from '../../models/pizza';
 import { form, FormField } from '@angular/forms/signals';
@@ -43,6 +45,10 @@ export class PizzaDetail {
 
   constructor() {
     console.log(this.pizzaService);
+
+    interval(1000)
+      .pipe(takeUntilDestroyed()) // Désabonnement automatique à la destruction du composant
+      .subscribe(value => console.log(value));
   }
 
   readonly NO_INGREDIENT = 'Aucun';

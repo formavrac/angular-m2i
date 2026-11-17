@@ -7,13 +7,14 @@ import { User } from './models/user';
 import { Author } from './components/author/author';
 import { PizzaService } from './services/pizza.service';
 import { MessageService } from './services/message.service';
+import { Search } from './components/search/search';
 
 // type Ingredient = {} // Juste typage...
 // interface Pizza {} // Typage + implémentation possible
 // class Box {} // Typage + instanciation possible
 
 @Component({
-  imports: [FormsModule, PizzaDetail, Counter, Author],
+  imports: [FormsModule, PizzaDetail, Counter, Author, Search],
   selector: 'app-root',
   template: `
     <div class="mx-auto max-w-xl p-6">
@@ -25,6 +26,7 @@ import { MessageService } from './services/message.service';
           (ordered)="onOrder($event)"
           (selectedIngredient)="onSelectIngredient($event)"
         />
+        <button (click)="selectedPizza.set(undefined)">Desélection</button>
         <input type="text" class="border" [(ngModel)]="pizza.name" />
         <input type="text" class="border"
           [value]="pizza.name"
@@ -82,6 +84,8 @@ import { MessageService } from './services/message.service';
       <app-counter [value]="15" />
 
       <app-author [author]="user()" />
+
+      <app-search />
 
       <h2>Messages</h2>
       <ul class="space-y-2">
