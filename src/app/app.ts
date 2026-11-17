@@ -24,7 +24,11 @@ const PIZZAS: Pizza[] = [
     <div class="mx-auto max-w-xl p-6">
       <h1 class="mb-4 text-3xl font-bold">{{ title() }}</h1>
       @if (selectedPizza(); as pizza) {
-        <app-pizza-detail [pizza]="pizza" />
+        <app-pizza-detail
+          [pizza]="pizza"
+          (pizzaChange)="onUpdate($event)"
+          (ordered)="onOrder($event)"
+        />
         <input type="text" class="border" [(ngModel)]="pizza.name" />
         <input type="text" class="border"
           [value]="pizza.name"
@@ -32,6 +36,13 @@ const PIZZAS: Pizza[] = [
         />
       } @else {
         <p class="mt-6 text-gray-500">Cliquez sur une pizza pour voir le détail.</p>
+      }
+
+      @if (orders().length) {
+        <p class="mt-4">Commandes : {{ orders().length }}</p>
+        @for (order of orders(); track order.id) {
+          <p>{{ order.name }}</p>
+        }
       }
 
       <input type="text" class="border" [(ngModel)]="title" />
@@ -81,6 +92,17 @@ export class App {
     birthDate: '1991-11-18',
     avatarUrl: 'https://i.pravatar.cc/150?img=63',
   });
+
+  orders = signal<Pizza[]>([]);
+
+  onOrder(pizza: Pizza) {
+    this.orders.update(orders => [...orders, pizza]);
+  }
+
+  onUpdate(pizza: Pizza) {
+    this.pizzas.update(pizzas => pizzas.map(p => (p.id === pizza.id ? pizza : p)));
+    this.selectedPizza.set(pizza);
+  }
 
   count = computed(() => {
     return this.title().length + Math.random();
