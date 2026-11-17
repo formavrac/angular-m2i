@@ -8,6 +8,7 @@ import { Author } from './components/author/author';
 import { PizzaService } from './services/pizza.service';
 import { MessageService } from './services/message.service';
 import { Search } from './components/search/search';
+import { HttpErrorResponse, httpResource } from '@angular/common/http';
 
 // type Ingredient = {} // Juste typage...
 // interface Pizza {} // Typage + implémentation possible
@@ -53,6 +54,10 @@ import { Search } from './components/search/search';
         <p>Chargement des pizzas...</p>
       }
       <button (click)="pizzas.reload()">Reload</button>
+      @if (pizzas.error()) {
+        {{ getError(pizzas.error()).status }}
+        <p class="text-red-600">Impossible de charger les pizzas.</p>
+      }
       <ul class="grid grid-cols-2 gap-4">
         @for (pizza of pizzas.value(); track pizza.id) {
           @let priceWithTax = (pizza.price * 1.2).toFixed(2);
@@ -119,10 +124,11 @@ export class App {
 
   title = signal('Pizza Party');
   selectedPizza = signal<Pizza | undefined>(undefined);
-  pizzas = resource({
-    loader: () => this.pizzaService.getPizzas(),
-    defaultValue: [],
-  });
+  pizzas = this.pizzaService.getPizzas();
+
+  getError(error: any) {
+    return error as HttpErrorResponse;
+  }
 
   user = signal<User>({
     name: 'Mota',
