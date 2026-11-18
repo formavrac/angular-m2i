@@ -12,6 +12,12 @@ describe('Author', () => {
 
     fixture = TestBed.createComponent(Author);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('author', {
+      name: 'Mota',
+      firstName: 'Matthieu',
+      birthDate: '1991-11-18',
+      avatarUrl: 'https://i.pravatar.cc/150?img=63',
+    });
     await fixture.whenStable();
   });
 
