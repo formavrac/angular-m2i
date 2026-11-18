@@ -1,13 +1,15 @@
 import { Service } from '@angular/core';
 import { Pizza } from '../models/pizza';
-import { httpResource } from '@angular/common/http';
+import { httpResource, HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { API_URL } from '../api-url';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Service()
 export class PizzaService {
   toto = Math.random();
 
+  private http = inject(HttpClient);
   private apiUrl = `${inject(API_URL)}/pizzas`;
 
   getPizzas() {
@@ -16,11 +18,19 @@ export class PizzaService {
     });
   }
 
-  async searchPizzas(query: string): Promise<Pizza[]> {
-    return Promise.resolve([]);
-    // const pizzas = await this.getPizzas();
-    // console.log('CALL API');
+  create(pizza: Omit<Pizza, 'id'>): Promise<Pizza> {
+    return firstValueFrom(this.http.post<Pizza>(this.apiUrl, pizza));
+  }
 
-    // return pizzas.filter(pizza => pizza.name.toLowerCase().includes(query.toLowerCase()));
+  update(pizza: Pizza): Promise<Pizza> {
+    return firstValueFrom(this.http.put<Pizza>(`${this.apiUrl}/${pizza.id}`, pizza));
+  }
+
+  delete(id: string): Promise<void> {
+    return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/${id}`));
+  }
+
+  search(query: string): Observable<Pizza[]> {
+    return this.http.get<Pizza[]>(this.apiUrl, { params: { 'name:contains': query } });
   }
 }

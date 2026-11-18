@@ -22,6 +22,10 @@ import { MessageService } from '../../services/message.service';
       </label>
       <img class="my-4 rounded-lg" [src]="pizza().image" [alt]="pizza().name" />
 
+      <button class="rounded bg-orange-600 px-4 py-2 text-white" (click)="saved.emit(pizza())">
+        Enregistrer
+      </button>
+
       <div>
         @for (ingredient of ingredients; track ingredient) {
           <label>
@@ -55,6 +59,7 @@ export class PizzaDetail {
   pizza = model.required<Pizza>();
   pizzaForm = form(this.pizza);
   ordered = output<Pizza>();
+  saved = output<Pizza>();
 
   ingredients = ['Tomates', 'Champignons', 'Olives', this.NO_INGREDIENT];
   selectedIngredient = output<string | undefined>();

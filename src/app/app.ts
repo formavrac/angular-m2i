@@ -26,6 +26,7 @@ import { HttpErrorResponse, httpResource } from '@angular/common/http';
           (pizzaChange)="onUpdate($event)"
           (ordered)="onOrder($event)"
           (selectedIngredient)="onSelectIngredient($event)"
+          (saved)="save($event)"
         />
         <button (click)="selectedPizza.set(undefined)">Desélection</button>
         <input type="text" class="border" [(ngModel)]="pizza.name" />
@@ -78,11 +79,16 @@ import { HttpErrorResponse, httpResource } from '@angular/common/http';
             @if (selectedIngredient()) {
               <span>Ingrédient sélectionné : {{ selectedIngredient() }}</span>
             }
+            <button class="ml-2 text-red-600" (click)="delete(pizza); $event.stopPropagation()">
+              Supprimer
+            </button>
           </li>
         } @empty {
           <li>Aucune pizza</li>
         }
       </ul>
+
+      <button (click)="add()">Ajouter une pizza</button>
 
       <app-counter />
       <app-counter [value]="5" />
@@ -175,5 +181,32 @@ export class App {
       type: 'info',
       content: `Pizza sélectionnée : ${pizza.name}`
     });
+  }
+
+  async add() {
+    const pizza = await this.pizzaService.create({
+      name: 'Nouvelle Pizza',
+      price: 10,
+    });
+    console.log(pizza);
+    this.pizzas.reload(); // httpResource
+  }
+
+  async save(pizza: Pizza) {
+    await this.pizzaService.update(pizza);
+    this.selectedPizza.set(undefined);
+    this.pizzas.reload();
+  }
+
+  async delete(pizza: Pizza) {
+    try {
+      await this.pizzaService.delete('90');
+      this.pizzas.update(pizzas => pizzas.filter(p => p.id !== pizza.id));
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        alert(`Erreur ${error.status} : ${error.message}`);
+        alert('Erreur ' + error.status + ' : ' + error.message);
+      }
+    }
   }
 }
