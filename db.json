@@ -25,5 +25,52 @@
       "image": "/assets/pizzas/cannibale.jpg"
     }
   ],
+  "users": [
+    {
+      "username": "aaa",
+      "email": "test@test.com",
+      "id": "T8DzS1_MDDY"
+    },
+    {
+      "username": "aaaa",
+      "email": "aaaa@zzzz",
+      "id": "jhC3K_Vy0mg"
+    },
+    {
+      "username": "aaaa",
+      "email": "aaa@aaaa",
+      "id": "XXU8MRSmzow"
+    },
+    {
+      "username": "aaaaa",
+      "email": "aaa@aaa",
+      "id": "SCVriMGzSm4"
+    },
+    {
+      "username": "aaaa",
+      "email": "aaaa@aaaa",
+      "id": "ZXbf3zLnDCI"
+    },
+    {
+      "username": "aaaa",
+      "email": "aaa@aaaa",
+      "id": "q6BSa_mJFiw"
+    },
+    {
+      "username": "aaaa",
+      "email": "aaa@aaaa",
+      "id": "OKgRfVoTSlI"
+    },
+    {
+      "username": "aaaaa",
+      "email": "aaaaa@aaaaa",
+      "id": "MXtRc4WcQaI"
+    },
+    {
+      "username": "aaaa",
+      "email": "aaa@aaaa",
+      "id": "kSzW2JcMVEk"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

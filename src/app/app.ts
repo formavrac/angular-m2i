@@ -15,6 +15,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       <nav class="mb-6 flex gap-4">
         <a routerLink="/" routerLinkActive="font-bold text-orange-600" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
         <a routerLink="/pizzas" routerLinkActive="font-bold text-orange-600">Pizzas</a>
+        <a routerLink="/register" routerLinkActive="font-bold text-orange-600">Inscription</a>
       </nav>
       <router-outlet />
     </div>
