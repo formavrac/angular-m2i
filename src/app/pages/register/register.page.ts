@@ -10,35 +10,38 @@ import { firstValueFrom } from 'rxjs';
   selector: 'app-register',
   imports: [FormField, FormRoot, JsonPipe],
   template: `
-    <form class="flex max-w-sm flex-col gap-4" [formRoot]="registerForm">
-      <label class="flex flex-col">
-        Pseudo
-        <input class="rounded border px-2 py-1" [formField]="registerForm.username" />
-        @if (registerForm.username().touched()) {
-          @for (error of registerForm.username().errors(); track error.kind) {
-            <span class="text-sm text-red-600">{{ error.message }}</span>
+    <section class="max-w-sm rounded-xl border border-gray-200 bg-white p-6 shadow-md" aria-labelledby="register-title">
+      <h2 id="register-title" class="mb-4 text-xl font-semibold">Inscription</h2>
+      <form class="flex flex-col gap-4" [formRoot]="registerForm">
+        <label class="flex flex-col">
+          Pseudo
+          <input class="rounded border px-2 py-1" [formField]="registerForm.username" />
+          @if (registerForm.username().touched()) {
+            @for (error of registerForm.username().errors(); track error.kind) {
+              <span class="text-sm text-red-600">{{ error.message }}</span>
+            }
           }
-        }
-      </label>
+        </label>
 
-      <label class="flex flex-col">
-        Email
-        <input type="email" class="rounded border px-2 py-1" [formField]="registerForm.email" />
-        @if (registerForm.email().touched()) {
-          @for (error of registerForm.email().errors(); track error.kind) {
-            <span class="text-sm text-red-600">{{ error.message }}</span>
+        <label class="flex flex-col">
+          Email
+          <input type="email" class="rounded border px-2 py-1" [formField]="registerForm.email" />
+          @if (registerForm.email().touched()) {
+            @for (error of registerForm.email().errors(); track error.kind) {
+              <span class="text-sm text-red-600">{{ error.message }}</span>
+            }
           }
-        }
-      </label>
+        </label>
 
-      <button class="rounded bg-orange-600 px-4 py-2 text-white disabled:opacity-50"
-        [disabled]="registerForm().submitting()"
-      >
-        S'inscrire
-      </button>
-    </form>
+        <button class="rounded-lg bg-orange-700 px-4 py-2 font-medium text-white transition hover:bg-orange-800 disabled:opacity-50"
+          [disabled]="registerForm().submitting()"
+        >
+          S'inscrire
+        </button>
+      </form>
+    </section>
 
-    <pre>{{ user() | json }}</pre>
+    <pre class="mt-4">{{ user() | json }}</pre>
   `,
 })
 export class RegisterPage {
