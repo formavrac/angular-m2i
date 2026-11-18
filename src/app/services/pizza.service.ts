@@ -1,4 +1,4 @@
-import { Service } from '@angular/core';
+import { Service, Signal } from '@angular/core';
 import { Pizza } from '../models/pizza';
 import { httpResource, HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
@@ -16,6 +16,10 @@ export class PizzaService {
     return httpResource<Pizza[]>(() => this.apiUrl, {
       defaultValue: [],
     });
+  }
+
+  getPizza(id: Signal<string>) {
+    return httpResource<Pizza>(() => `${this.apiUrl}/${id()}`);
   }
 
   create(pizza: Omit<Pizza, 'id'>): Promise<Pizza> {

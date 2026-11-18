@@ -9,9 +9,10 @@ import { PizzaDetail } from '../../components/pizza-detail/pizza-detail';
 import { Counter } from '../../components/counter/counter';
 import { Author } from '../../components/author/author';
 import { Search } from '../../components/search/search';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [FormsModule, PizzaDetail, Counter, Author, Search],
+  imports: [FormsModule, PizzaDetail, Counter, Author, Search, RouterLink],
   selector: 'app-pizzas',
   styleUrl: './pizzas.page.css',
   templateUrl: './pizzas.page.html',

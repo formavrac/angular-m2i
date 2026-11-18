@@ -60,6 +60,7 @@
       <button class="ml-2 text-red-600" (click)="delete(pizza); $event.stopPropagation()">
         Supprimer
       </button>
+      <a [routerLink]="['/pizza', pizza.id]" class="rounded-lg border p-2 hover:bg-orange-50">Voir</a>
     </li>
   } @empty {
     <li>Aucune pizza</li>
