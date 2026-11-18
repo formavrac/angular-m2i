@@ -87,7 +87,7 @@ export class PizzasPage {
 
   async delete(pizza: Pizza) {
     try {
-      await this.pizzaService.delete('90');
+      await this.pizzaService.delete(pizza.id);
       this.pizzas.update(pizzas => pizzas.filter(p => p.id !== pizza.id));
     } catch (error) {
       if (error instanceof HttpErrorResponse) {

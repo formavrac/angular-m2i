@@ -31,7 +31,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       </div>
     </header>
 
-    <main class="mx-auto max-w-xl p-6">
+    <main class="mx-auto max-w-5xl px-6 py-6">
       <router-outlet />
     </main>
   `,

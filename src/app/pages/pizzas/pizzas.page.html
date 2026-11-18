@@ -37,8 +37,9 @@
   {{ getError(pizzas.error()).status }}
   <p class="text-red-600">Impossible de charger les pizzas.</p>
 }
-<ul class="grid grid-cols-2 gap-4">
-  @for (pizza of pizzas.value(); track pizza.id) {
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- value() lève une erreur si la ressource est en erreur, on vérifie hasValue() avant -->
+  @for (pizza of pizzas.hasValue() ? pizzas.value() : []; track pizza.id) {
     @let priceWithTax = (pizza.price * 1.2).toFixed(2);
     <li
       class="cursor-pointer rounded-lg border p-2 hover:bg-orange-50"

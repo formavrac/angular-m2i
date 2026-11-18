@@ -10,7 +10,7 @@ import { firstValueFrom } from 'rxjs';
   selector: 'app-register',
   imports: [FormField, FormRoot, JsonPipe],
   template: `
-    <section class="max-w-sm rounded-xl border border-gray-200 bg-white p-6 shadow-md" aria-labelledby="register-title">
+    <section class="mx-auto max-w-sm rounded-xl border border-gray-200 bg-white p-6 shadow-md" aria-labelledby="register-title">
       <h2 id="register-title" class="mb-4 text-xl font-semibold">Inscription</h2>
       <form class="flex flex-col gap-4" [formRoot]="registerForm">
         <label class="flex flex-col">
@@ -41,7 +41,7 @@ import { firstValueFrom } from 'rxjs';
       </form>
     </section>
 
-    <pre class="mt-4">{{ user() | json }}</pre>
+    <pre class="mx-auto mt-4 max-w-sm">{{ user() | json }}</pre>
   `,
 })
 export class RegisterPage {
