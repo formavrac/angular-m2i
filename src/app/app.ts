@@ -16,6 +16,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         <a routerLink="/" routerLinkActive="font-bold text-orange-600" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
         <a routerLink="/pizzas" routerLinkActive="font-bold text-orange-600">Pizzas</a>
         <a routerLink="/register" routerLinkActive="font-bold text-orange-600">Inscription</a>
+        <a routerLink="/exercice" routerLinkActive="font-bold text-orange-600">Exercice</a>
       </nav>
       <router-outlet />
     </div>

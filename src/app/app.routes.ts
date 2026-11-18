@@ -9,4 +9,9 @@ export const routes: Routes = [
   { path: 'pizzas', component: PizzasPage, title: 'Gestion des pizzas' },
   { path: 'pizza/:id', component: PizzaPage },
   { path: 'register', component: RegisterPage, title: 'Inscription' },
+  {
+    path: 'exercice',
+    loadComponent: () => import('./pages/exercice/exercice.page').then(m => m.ExercicePage),
+    title: 'Exercice',
+  },
 ];

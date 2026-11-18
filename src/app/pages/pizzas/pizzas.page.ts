@@ -3,16 +3,13 @@ import { PizzaService } from '../../services/pizza.service';
 import { MessageService } from '../../services/message.service';
 import { Pizza } from '../../models/pizza';
 import { HttpErrorResponse } from '@angular/common/http';
-import { User } from '../../models/user';
 import { FormsModule } from '@angular/forms';
 import { PizzaDetail } from '../../components/pizza-detail/pizza-detail';
-import { Counter } from '../../components/counter/counter';
-import { Author } from '../../components/author/author';
 import { Search } from '../../components/search/search';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [FormsModule, PizzaDetail, Counter, Author, Search, RouterLink],
+  imports: [FormsModule, PizzaDetail, Search, RouterLink],
   selector: 'app-pizzas',
   styleUrl: './pizzas.page.css',
   templateUrl: './pizzas.page.html',
@@ -32,13 +29,6 @@ export class PizzasPage {
   getError(error: any) {
     return error as HttpErrorResponse;
   }
-
-  user = signal<User>({
-    name: 'Mota',
-    firstName: 'Matthieu',
-    birthDate: '1991-11-18',
-    avatarUrl: 'https://i.pravatar.cc/150?img=63',
-  });
 
   orders = signal<Pizza[]>([]);
   selectedIngredient = signal<string | undefined>(undefined);
