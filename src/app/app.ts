@@ -1,13 +1,15 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Footer } from './components/footer/footer';
 
 // type Ingredient = {} // Juste typage...
 // interface Pizza {} // Typage + implémentation possible
 // class Box {} // Typage + instanciation possible
 
 @Component({
-  imports: [FormsModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [FormsModule, RouterOutlet, RouterLink, RouterLinkActive, Footer],
+  host: { class: 'flex min-h-dvh flex-col' },
   selector: 'app-root',
   template: `
     <header class="border-b border-gray-200 bg-white">
@@ -31,9 +33,11 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       </div>
     </header>
 
-    <main class="mx-auto max-w-5xl px-6 py-6">
+    <main class="mx-auto w-full max-w-5xl flex-1 px-6 py-6">
       <router-outlet />
     </main>
+
+    <app-footer [title]="title()" />
   `,
 })
 export class App {
